@@ -53,6 +53,23 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                     Register
                                 </Link>
                             </div>
+                            
+                            <div className="mt-8 flex gap-4 justify-center">
+                                <Link
+                                    href={route('event-organizer')}
+                                    className="px-8 py-3 rounded-lg text-white text-lg border-2 transition hover:bg-white/10"
+                                    style={{ borderColor: '#27A13C' }}
+                                >
+                                    Event Organizer
+                                </Link>
+                                <Link
+                                    href={route('admin')}
+                                    className="px-8 py-3 rounded-lg text-white text-lg border-2 transition hover:bg-white/10"
+                                    style={{ borderColor: '#27A13C' }}
+                                >
+                                    Admin
+                                </Link>
+                            </div>
                         </div>
                     </main>
 
