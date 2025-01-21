@@ -71,8 +71,6 @@ Route::middleware('auth:event-organizer')->group(function () {
         ->name('event-organizer.dashboard');
 
     // Event Management Routes
-    Route::get('/event-organizer/events', [EventOrganizerEventController::class, 'index'])
-        ->name('event-organizer.events.index');
     Route::get('/event-organizer/events/create', [EventOrganizerEventController::class, 'create'])
         ->name('event-organizer.events.create');
     Route::post('/event-organizer/events', [EventOrganizerEventController::class, 'store'])

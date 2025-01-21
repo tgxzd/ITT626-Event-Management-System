@@ -173,7 +173,7 @@ class EventController extends Controller
 
             $event = Event::create($eventData);
 
-            return to_route('event-organizer.events.index');
+            return to_route('event-organizer.dashboard');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
@@ -183,13 +183,12 @@ class EventController extends Controller
 
     public function dashboard()
     {
-        $recentEvents = Event::where('organizer_id', Auth::id())
+        $events = Event::where('organizer_id', Auth::id())
             ->with(['registrations' => function($query) {
                 $query->where('status', 'registered')
                     ->with('user');
             }])
             ->orderBy('created_at', 'desc')
-            ->take(5)
             ->get();
 
         return Inertia::render('EventOrganizer/Dashboard', [
@@ -197,7 +196,7 @@ class EventController extends Controller
                 'user' => Auth::user(),
             ],
             'eventStats' => [
-                'recentEvents' => $recentEvents,
+                'events' => $events,
             ],
         ]);
     }

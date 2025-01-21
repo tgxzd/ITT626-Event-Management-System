@@ -76,7 +76,7 @@ export default function Edit({ auth, event }) {
                         Edit Event
                     </h2>
                     <Link
-                        href={route('event-organizer.events.index')}
+                        href={route('event-organizer.dashboard')}
                         className="rounded-md bg-gray-600 px-4 py-2 text-white transition hover:bg-gray-700"
                     >
                         Back to Events
