@@ -18,6 +18,8 @@ export default function Create({ auth }) {
         longitude: '',
         capacity: '',
         image: null,
+        is_paid: false,
+        price: '',
     });
 
     const openInGoogleMaps = () => {
@@ -150,6 +152,53 @@ export default function Create({ auth }) {
                                     />
                                     <InputError message={errors.capacity} className="mt-2" />
                                 </div>
+
+                                <div>
+                                    <InputLabel htmlFor="is_paid" value="Event Type" />
+                                    <div className="mt-2">
+                                        <div className="flex items-center space-x-4">
+                                            <label className="inline-flex items-center">
+                                                <input
+                                                    type="radio"
+                                                    name="is_paid"
+                                                    checked={!data.is_paid}
+                                                    onChange={() => setData('is_paid', false)}
+                                                    className="text-purple-600 focus:ring-purple-500 dark:bg-gray-900"
+                                                />
+                                                <span className="ml-2 text-gray-700 dark:text-gray-300">Free Event</span>
+                                            </label>
+                                            <label className="inline-flex items-center">
+                                                <input
+                                                    type="radio"
+                                                    name="is_paid"
+                                                    checked={data.is_paid}
+                                                    onChange={() => setData('is_paid', true)}
+                                                    className="text-purple-600 focus:ring-purple-500 dark:bg-gray-900"
+                                                />
+                                                <span className="ml-2 text-gray-700 dark:text-gray-300">Paid Event</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {data.is_paid && (
+                                    <div>
+                                        <InputLabel htmlFor="price" value="Ticket Price (RM)" />
+                                        <TextInput
+                                            id="price"
+                                            type="number"
+                                            step="0.01"
+                                            name="price"
+                                            value={data.price}
+                                            className="mt-1 block w-full"
+                                            onChange={(e) => setData('price', e.target.value)}
+                                            required={data.is_paid}
+                                            min="0"
+                                            placeholder="0.00"
+                                        />
+                                        <InputError message={errors.price} className="mt-2" />
+                                    </div>
+                                )}
 
                                 <div>
                                     <InputLabel htmlFor="image" value="Event Image" />

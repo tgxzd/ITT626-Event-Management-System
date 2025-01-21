@@ -71,8 +71,12 @@ class EventController extends Controller
                 'description' => 'required|string',
                 'event_date' => 'required|date',
                 'location' => 'required|string|max:255',
+                'latitude' => 'nullable|numeric|between:-90,90',
+                'longitude' => 'nullable|numeric|between:-180,180',
                 'capacity' => 'required|integer|min:1',
                 'status' => 'required|in:draft,active,inactive',
+                'is_paid' => 'required|boolean',
+                'price' => 'required_if:is_paid,true|nullable|numeric|min:0',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             ]);
 
@@ -81,8 +85,12 @@ class EventController extends Controller
                 'description' => $validated['description'],
                 'event_date' => $validated['event_date'],
                 'location' => $validated['location'],
+                'latitude' => $validated['latitude'],
+                'longitude' => $validated['longitude'],
                 'capacity' => $validated['capacity'],
                 'status' => $validated['status'],
+                'is_paid' => $validated['is_paid'],
+                'price' => $validated['is_paid'] ? $validated['price'] : null,
             ];
 
             if ($request->hasFile('image')) {
@@ -136,7 +144,11 @@ class EventController extends Controller
                 'description' => 'required|string',
                 'event_date' => 'required|date',
                 'location' => 'required|string|max:255',
+                'latitude' => 'nullable|numeric|between:-90,90',
+                'longitude' => 'nullable|numeric|between:-180,180',
                 'capacity' => 'required|integer|min:1',
+                'is_paid' => 'required|boolean',
+                'price' => 'required_if:is_paid,true|nullable|numeric|min:0',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             ]);
 
@@ -146,7 +158,11 @@ class EventController extends Controller
                 'description' => $validated['description'],
                 'event_date' => $validated['event_date'],
                 'location' => $validated['location'],
+                'latitude' => $validated['latitude'],
+                'longitude' => $validated['longitude'],
                 'capacity' => $validated['capacity'],
+                'is_paid' => $validated['is_paid'],
+                'price' => $validated['is_paid'] ? $validated['price'] : null,
                 'status' => 'draft'
             ];
 

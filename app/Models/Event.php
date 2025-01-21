@@ -23,10 +23,14 @@ class Event extends Model
         'capacity',
         'status',
         'image',
+        'is_paid',
+        'price',
     ];
 
     protected $casts = [
         'event_date' => 'datetime',
+        'is_paid' => 'boolean',
+        'price' => 'decimal:2',
     ];
 
     protected $appends = ['image_url'];

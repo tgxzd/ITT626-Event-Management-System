@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
-import { CalendarDaysIcon, MapPinIcon, UserGroupIcon } from '@heroicons/react/24/outline';
+import { CalendarDaysIcon, MapPinIcon, UserGroupIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 
 export default function Show({ auth, event }) {
     const formatDate = (dateString) => {
@@ -20,7 +20,7 @@ export default function Show({ auth, event }) {
             user={auth.user}
             header={
                 <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-semibold leading-tight text-gray-800">
+                    <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-white">
                         Event Details
                     </h2>
                     <div className="flex gap-4">
@@ -44,7 +44,7 @@ export default function Show({ auth, event }) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                    <div className="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
                         <div className="p-6">
                             {/* Event Image */}
                             <div className="mb-8 overflow-hidden rounded-lg">
@@ -61,45 +61,55 @@ export default function Show({ auth, event }) {
                                 )}
                             </div>
 
-                            {/* Event Status */}
-                            <div className="mb-6">
+                            {/* Event Status and Price */}
+                            <div className="mb-6 flex items-center space-x-2">
                                 <span className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold 
-                                    ${event.status === 'active' ? 'bg-green-100 text-green-800' : 
-                                    event.status === 'draft' ? 'bg-yellow-100 text-yellow-800' : 
-                                    'bg-red-100 text-red-800'}`}>
+                                    ${event.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 
+                                    event.status === 'draft' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 
+                                    'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'}`}>
                                     {event.status.charAt(0).toUpperCase() + event.status.slice(1)}
                                 </span>
+                                {event.is_paid ? (
+                                    <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                        <CurrencyDollarIcon className="mr-1 h-4 w-4" />
+                                        RM {parseFloat(event.price).toFixed(2)}
+                                    </span>
+                                ) : (
+                                    <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-semibold text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+                                        Free Event
+                                    </span>
+                                )}
                             </div>
 
                             {/* Event Details */}
                             <div className="space-y-6">
                                 <div>
-                                    <h1 className="mb-2 text-3xl font-bold text-gray-900">{event.title}</h1>
-                                    <p className="text-lg text-gray-600">{event.description}</p>
+                                    <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">{event.title}</h1>
+                                    <p className="text-lg text-gray-600 dark:text-gray-300">{event.description}</p>
                                 </div>
 
                                 <div className="grid gap-6 sm:grid-cols-3">
                                     <div className="flex items-center space-x-2">
                                         <CalendarDaysIcon className="h-5 w-5 text-gray-400" />
                                         <div>
-                                            <p className="text-sm font-medium text-gray-500">Date & Time</p>
-                                            <p className="text-sm text-gray-900">{formatDate(event.event_date)}</p>
+                                            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Date & Time</p>
+                                            <p className="text-sm text-gray-900 dark:text-gray-300">{formatDate(event.event_date)}</p>
                                         </div>
                                     </div>
 
                                     <div className="flex items-center space-x-2">
                                         <MapPinIcon className="h-5 w-5 text-gray-400" />
                                         <div>
-                                            <p className="text-sm font-medium text-gray-500">Location</p>
-                                            <p className="text-sm text-gray-900">{event.location}</p>
+                                            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Location</p>
+                                            <p className="text-sm text-gray-900 dark:text-gray-300">{event.location}</p>
                                         </div>
                                     </div>
 
                                     <div className="flex items-center space-x-2">
                                         <UserGroupIcon className="h-5 w-5 text-gray-400" />
                                         <div>
-                                            <p className="text-sm font-medium text-gray-500">Capacity</p>
-                                            <p className="text-sm text-gray-900">{event.capacity} people</p>
+                                            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Capacity</p>
+                                            <p className="text-sm text-gray-900 dark:text-gray-300">{event.capacity} people</p>
                                         </div>
                                     </div>
                                 </div>

@@ -7,16 +7,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
             <div className="min-h-screen" style={{ backgroundColor: '#0A1017' }}>
                 <div className="relative">
                     {/* Navigation */}
-                    <nav className="p-6 flex justify-end">
-                        {auth.user && (
-                            <Link
-                                href={route('dashboard')}
-                                className="text-white hover:text-gray-300 px-4 py-2 rounded-md transition"
-                            >
-                                Dashboard
-                            </Link>
-                        )}
-                    </nav>
+                  
 
                     {/* Main Content */}
                     <main className="flex flex-col items-center justify-center min-h-[80vh]">

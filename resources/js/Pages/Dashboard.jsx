@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, router } from '@inertiajs/react';
-import { CalendarDaysIcon, MapPinIcon, UserGroupIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { CalendarDaysIcon, MapPinIcon, UserGroupIcon, MagnifyingGlassIcon, XMarkIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import { useState, useCallback } from 'react';
 import debounce from 'lodash/debounce';
 
@@ -45,13 +45,13 @@ export default function Dashboard({ auth, events, filters }) {
     const getStatusColor = (status) => {
         switch (status) {
             case 'active':
-                return 'bg-green-100 text-green-800';
+                return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
             case 'draft':
-                return 'bg-yellow-100 text-yellow-800';
+                return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
             case 'inactive':
-                return 'bg-red-100 text-red-800';
+                return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
             default:
-                return 'bg-gray-100 text-gray-800';
+                return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
         }
     };
 
@@ -154,19 +154,31 @@ export default function Dashboard({ auth, events, filters }) {
                                     <div className="p-6">
                                         <div className="flex items-baseline justify-between">
                                             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{event.title}</h3>
-                                            {event.is_registered ? (
-                                                <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800 dark:bg-green-900 dark:text-green-200">
-                                                    Registered
-                                                </span>
-                                            ) : event.available_spots > 0 ? (
-                                                <span className="inline-flex rounded-full bg-blue-100 px-2 text-xs font-semibold leading-5 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                                                    {event.available_spots} spots left
-                                                </span>
-                                            ) : (
-                                                <span className="inline-flex rounded-full bg-red-100 px-2 text-xs font-semibold leading-5 text-red-800 dark:bg-red-900 dark:text-red-200">
-                                                    Full
-                                                </span>
-                                            )}
+                                            <div className="flex items-center space-x-2">
+                                                {event.is_paid ? (
+                                                    <span className="inline-flex rounded-full bg-blue-100 px-2 text-xs font-semibold leading-5 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                                        <CurrencyDollarIcon className="mr-1 h-3 w-3" />
+                                                        RM {parseFloat(event.price).toFixed(2)}
+                                                    </span>
+                                                ) : (
+                                                    <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                                        Free
+                                                    </span>
+                                                )}
+                                                {event.is_registered ? (
+                                                    <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                                        Registered
+                                                    </span>
+                                                ) : event.available_spots > 0 ? (
+                                                    <span className="inline-flex rounded-full bg-blue-100 px-2 text-xs font-semibold leading-5 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                                        {event.available_spots} spots left
+                                                    </span>
+                                                ) : (
+                                                    <span className="inline-flex rounded-full bg-red-100 px-2 text-xs font-semibold leading-5 text-red-800 dark:bg-red-900 dark:text-red-200">
+                                                        Full
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
                                         <div className="mt-4 space-y-3">
                                             <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
