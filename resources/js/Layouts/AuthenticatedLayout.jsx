@@ -59,7 +59,9 @@ export default function Authenticated({ user, header, children }) {
                         <div className="flex">
                             <div className="flex shrink-0 items-center">
                                 <Link href="/">
-                                    <h1 className="text-xl font-bold text-gray-900 dark:text-white">Event Management</h1>
+                                    <h1 className="bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-400 bg-clip-text text-2xl font-extrabold tracking-tight text-transparent transition-all duration-300 hover:scale-105 hover:from-purple-500 hover:via-pink-400 hover:to-indigo-500">
+                                        Event Management
+                                    </h1>
                                 </Link>
                             </div>
                         </div>
