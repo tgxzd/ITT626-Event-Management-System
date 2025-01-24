@@ -72,7 +72,7 @@ export default function Show({ auth, event }) {
                                 {event.is_paid ? (
                                     <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                                         <CurrencyDollarIcon className="mr-1 h-4 w-4" />
-                                        {parseFloat(event.price).toFixed(8)} ETH
+                                        RM {parseFloat(event.price).toFixed(2)}
                                     </span>
                                 ) : (
                                     <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-semibold text-gray-800 dark:bg-gray-900 dark:text-gray-200">

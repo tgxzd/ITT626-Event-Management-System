@@ -240,20 +240,17 @@ export default function Edit({ auth, event }) {
 
                                 {data.is_paid && (
                                     <div>
-                                        <InputLabel htmlFor="price" value="Ticket Price (ETH)" />
+                                        <InputLabel htmlFor="price" value="Ticket Price (RM)" />
                                         <TextInput
                                             id="price"
                                             type="number"
-                                            step="0.00000001"
+                                            step="0.01"
                                             name="price"
                                             value={data.price}
                                             className="mt-1 block w-full"
                                             onChange={(e) => setData('price', e.target.value)}
-                                            placeholder="0.00000000"
+                                            placeholder="0.00"
                                         />
-                                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                                            Enter the price in ETH (e.g., 0.05 ETH)
-                                        </p>
                                         <InputError message={errors.price} className="mt-2" />
                                     </div>
                                 )}

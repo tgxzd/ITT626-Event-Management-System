@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::table('events', function (Blueprint $table) {
             $table->boolean('is_paid')->default(false)->after('status');
-            $table->decimal('price', 16, 8)->nullable()->after('is_paid');
+            $table->decimal('price', 10, 2)->nullable()->after('is_paid');
         });
     }
 

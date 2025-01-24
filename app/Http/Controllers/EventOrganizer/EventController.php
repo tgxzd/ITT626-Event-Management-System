@@ -123,7 +123,7 @@ class EventController extends Controller
 
         $event->delete();
 
-        return redirect()->route('event-organizer.dashboard')
+        return redirect()->route('event-organizer.events.index')
             ->with('success', 'Event deleted successfully.');
     }
 

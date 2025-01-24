@@ -50,8 +50,6 @@ class EventController extends Controller
                 'event_date' => 'required|date',
                 'location' => 'required|string|max:255',
                 'capacity' => 'required|integer|min:1',
-                'is_paid' => 'required|boolean',
-                'price' => 'required_if:is_paid,true|nullable|numeric|min:0|decimal:0,8',
             ]);
 
             Log::info('Validation passed', $validated);
@@ -65,9 +63,7 @@ class EventController extends Controller
                 'description' => $validated['description'],
                 'event_date' => $validated['event_date'],
                 'location' => $validated['location'],
-                'capacity' => $validated['capacity'],
-                'is_paid' => $validated['is_paid'],
-                'price' => $validated['is_paid'] ? $validated['price'] : null,
+                'capacity' => $validated['capacity']
             ]);
 
             Log::info('Event created', ['event' => $event]);

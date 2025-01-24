@@ -21,42 +21,24 @@ const GoogleMapPicker = ({ onLocationSelect, initialLocation }) => {
         let errorMessage = '';
         switch (error.code) {
             case error.PERMISSION_DENIED:
-                errorMessage = 'Location access was denied. Please enable location access:\n\n' +
-                    'For Chrome/Edge:\n' +
-                    '1. Click the lock/site info icon (🔒) in the address bar\n' +
-                    '2. Click "Site settings"\n' +
+                errorMessage = 'Location access was denied. Please follow these steps:\n\n' +
+                    '1. Click the lock/info icon in your browser\'s address bar\n' +
+                    '2. Click on "Site Settings"\n' +
                     '3. Find "Location" and change it to "Allow"\n' +
-                    '4. Refresh the page\n\n' +
-                    'For Firefox:\n' +
-                    '1. Click the shield/info icon in the address bar\n' +
-                    '2. Click "Site Information"\n' +
-                    '3. Under "Access Your Location", select "Allow"\n' +
-                    '4. Refresh the page\n\n' +
-                    'For Safari:\n' +
-                    '1. Click Safari > Settings for This Website\n' +
-                    '2. Find "Location" and select "Allow"\n' +
-                    '3. Refresh the page';
+                    '4. Refresh the page and try again';
                 break;
             case error.POSITION_UNAVAILABLE:
-                errorMessage = 'Location information is unavailable. Please:\n\n' +
-                    '1. Check if your device\'s location services are enabled\n' +
-                    '2. Make sure you have an active internet connection\n' +
-                    '3. Try again or use the search box/map to set location manually';
+                errorMessage = 'Location information is unavailable. Please check your device\'s location settings and try again.';
                 break;
             case error.TIMEOUT:
-                errorMessage = 'Location request timed out. Please:\n\n' +
-                    '1. Check your internet connection\n' +
-                    '2. Make sure location services are enabled\n' +
-                    '3. Try again or use the search box/map to set location manually';
+                errorMessage = 'Location request timed out. Please check your internet connection and try again.';
                 break;
             default:
-                errorMessage = 'An error occurred while getting your location. Please:\n\n' +
-                    '1. Check your device\'s location settings\n' +
-                    '2. Ensure you have a stable internet connection\n' +
-                    '3. Try again or use the search box/map to set location manually';
+                errorMessage = 'An unknown error occurred while trying to get your location. Please try again.';
         }
         
         setLocationError(errorMessage);
+        alert(errorMessage);
     };
 
     const getUserLocation = () => {
@@ -237,21 +219,9 @@ const GoogleMapPicker = ({ onLocationSelect, initialLocation }) => {
             </div>
             {locationError && (
                 <div className="rounded-md bg-yellow-50 p-4 dark:bg-yellow-900">
-                    <div className="flex">
-                        <div className="flex-shrink-0">
-                            <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M8.485 2.495c.873-1.512 3.157-1.512 4.03 0l8.486 14.7c.873 1.512-.218 3.405-2.015 3.405H2.014c-1.797 0-2.888-1.893-2.015-3.405l8.486-14.7zM10 5a1 1 0 011 1v6a1 1 0 11-2 0V6a1 1 0 011-1zm0 9a1 1 0 100 2 1 1 0 000-2z" clipRule="evenodd" />
-                            </svg>
-                        </div>
-                        <div className="ml-3">
-                            <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
-                                Location Access Required
-                            </h3>
-                            <div className="mt-2 text-sm text-yellow-700 dark:text-yellow-300 whitespace-pre-line">
-                                {locationError}
-                            </div>
-                        </div>
-                    </div>
+                    <p className="text-sm text-yellow-700 dark:text-yellow-200">
+                        {locationError}
+                    </p>
                 </div>
             )}
             <div

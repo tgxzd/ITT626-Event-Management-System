@@ -15,11 +15,7 @@ class DashboardController extends Controller
             ->latest();
 
         if ($request->has('search')) {
-            $query->where(function($q) use ($request) {
-                $q->where('title', 'like', '%' . $request->search . '%')
-                  ->orWhere('description', 'like', '%' . $request->search . '%')
-                  ->orWhere('location', 'like', '%' . $request->search . '%');
-            });
+            $query->where('title', 'like', '%' . $request->search . '%');
         }
 
         $events = $query->get();
@@ -31,8 +27,7 @@ class DashboardController extends Controller
             
             return array_merge($event->toArray(), [
                 'is_registered' => $isRegistered,
-                'available_spots' => $availableSpots,
-                'price' => $event->is_paid ? number_format($event->price, 8, '.', '') : null
+                'available_spots' => $availableSpots
             ]);
         });
 

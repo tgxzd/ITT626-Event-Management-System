@@ -158,7 +158,7 @@ export default function Dashboard({ auth, events, filters }) {
                                                 {event.is_paid ? (
                                                     <span className="inline-flex rounded-full bg-blue-100 px-2 text-xs font-semibold leading-5 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                                                         <CurrencyDollarIcon className="mr-1 h-3 w-3" />
-                                                        {parseFloat(event.price).toFixed(8)} ETH
+                                                        RM {parseFloat(event.price).toFixed(2)}
                                                     </span>
                                                 ) : (
                                                     <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800 dark:bg-green-900 dark:text-green-200">

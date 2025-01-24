@@ -1,24 +1,28 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { CalendarDaysIcon, MapPinIcon, UserGroupIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import Modal from '@/Components/Modal';
+import DangerButton from '@/Components/DangerButton';
+import SecondaryButton from '@/Components/SecondaryButton';
 
 export default function Dashboard({ auth, eventStats }) {
-    const [processing, setProcessing] = useState(false);
+    const [deletingEventId, setDeletingEventId] = useState(null);
+    const { delete: destroy } = useForm();
 
-    const handleDelete = (eventId) => {
-        if (confirm('Are you sure you want to delete this event?')) {
-            setProcessing(true);
-            router.delete(route('event-organizer.events.destroy', eventId), {
-                onSuccess: () => {
-                    setProcessing(false);
-                    router.visit(route('event-organizer.dashboard'));
-                },
-                onError: () => {
-                    setProcessing(false);
-                },
-            });
-        }
+    const confirmEventDeletion = (eventId) => {
+        setDeletingEventId(eventId);
+    };
+
+    const deleteEvent = () => {
+        destroy(route('event-organizer.events.destroy', deletingEventId), {
+            preserveScroll: true,
+            onSuccess: () => setDeletingEventId(null),
+        });
+    };
+
+    const closeModal = () => {
+        setDeletingEventId(null);
     };
 
     const formatDate = (dateString) => {
@@ -64,6 +68,29 @@ export default function Dashboard({ auth, eventStats }) {
             }
         >
             <Head title="Dashboard" />
+
+            <Modal show={!!deletingEventId} onClose={closeModal}>
+                <div className="p-6">
+                    <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                        Are you sure you want to delete this event?
+                    </h2>
+
+                    <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                        Once this event is deleted, all of its resources and data will be permanently deleted.
+                    </p>
+
+                    <div className="mt-6 flex justify-end">
+                        <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
+
+                        <DangerButton
+                            className="ml-3"
+                            onClick={deleteEvent}
+                        >
+                            Delete Event
+                        </DangerButton>
+                    </div>
+                </div>
+            </Modal>
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -153,7 +180,7 @@ export default function Dashboard({ auth, eventStats }) {
                                                         {event.is_paid ? (
                                                             <span className="inline-flex items-center text-sm font-medium text-gray-900 dark:text-white">
                                                                 <CurrencyDollarIcon className="mr-1 h-4 w-4 text-gray-500" />
-                                                                {parseFloat(event.price).toFixed(8)} ETH
+                                                                RM {parseFloat(event.price).toFixed(2)}
                                                             </span>
                                                         ) : (
                                                             <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -168,28 +195,31 @@ export default function Dashboard({ auth, eventStats }) {
                                                     </td>
                                                     <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                                                         <div className="flex space-x-3">
-                                                            <Link
-                                                                href={route('event-organizer.events.show', event.id)}
+                                                            <button
+                                                                onClick={() => window.location.href = route('event-organizer.events.show', event.id)}
                                                                 className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+                                                                type="button"
                                                             >
                                                                 View
-                                                            </Link>
-                                                            <Link
-                                                                href={route('event-organizer.events.edit', event.id)}
+                                                            </button>
+                                                            <button
+                                                                onClick={() => window.location.href = route('event-organizer.events.edit', event.id)}
                                                                 className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                                                                type="button"
                                                             >
                                                                 Edit
-                                                            </Link>
-                                                            <Link
-                                                                href={route('event-organizer.events.registrations', event.id)}
+                                                            </button>
+                                                            <button
+                                                                onClick={() => window.location.href = route('event-organizer.events.registrations', event.id)}
                                                                 className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+                                                                type="button"
                                                             >
                                                                 Registrations
-                                                            </Link>
+                                                            </button>
                                                             <button
-                                                                onClick={() => handleDelete(event.id)}
-                                                                disabled={processing}
+                                                                onClick={() => confirmEventDeletion(event.id)}
                                                                 className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                                                                type="button"
                                                             >
                                                                 Delete
                                                             </button>

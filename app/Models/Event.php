@@ -30,7 +30,7 @@ class Event extends Model
     protected $casts = [
         'event_date' => 'datetime',
         'is_paid' => 'boolean',
-        'price' => 'decimal:8',
+        'price' => 'decimal:2',
     ];
 
     protected $appends = ['image_url'];
