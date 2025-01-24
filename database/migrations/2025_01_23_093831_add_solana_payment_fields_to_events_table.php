@@ -6,18 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->boolean('is_paid')->default(false)->after('status');
-            $table->decimal('price', 16, 8)->nullable()->after('is_paid');
+            //
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->dropColumn(['is_paid', 'price']);
+            //
         });
     }
-}; 
+};

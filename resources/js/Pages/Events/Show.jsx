@@ -1,17 +1,78 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { CalendarDaysIcon, MapPinIcon, UserIcon, UserGroupIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
+import { ethers } from 'ethers';
+import { registerForEvent } from '@/contracts/eventPaymentContract';
 
 export default function Show({ auth, event }) {
     const { post, processing } = useForm();
+    const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+    const [paymentError, setPaymentError] = useState('');
 
-    const handleRegistration = () => {
-        let message = event.is_paid 
-            ? `This is a paid event. The registration fee is RM ${parseFloat(event.price).toFixed(2)}. Proceed with registration?`
-            : 'Are you sure you want to register for this event?';
+    const handleRegistration = async () => {
+        if (event.is_paid) {
+            try {
+                setIsProcessingPayment(true);
+                setPaymentError('');
 
-        if (confirm(message)) {
-            post(route('events.register', event.id));
+                // Check if MetaMask is installed
+                if (!window.ethereum) {
+                    throw new Error('Please install MetaMask to make payments');
+                }
+
+                // Request account access
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const signer = provider.getSigner();
+
+                // Switch to Sepolia network if not already on it
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: '0xaa36a7' }], // Chain ID for Sepolia
+                    });
+                } catch (switchError) {
+                    if (switchError.code === 4902) {
+                        try {
+                            await window.ethereum.request({
+                                method: 'wallet_addEthereumChain',
+                                params: [{
+                                    chainId: '0xaa36a7',
+                                    chainName: 'Sepolia Test Network',
+                                    nativeCurrency: {
+                                        name: 'SepoliaETH',
+                                        symbol: 'ETH',
+                                        decimals: 18
+                                    },
+                                    rpcUrls: ['https://sepolia.infura.io/v3/'],
+                                    blockExplorerUrls: ['https://sepolia.etherscan.io']
+                                }]
+                            });
+                        } catch (addError) {
+                            throw new Error('Failed to add Sepolia network');
+                        }
+                    } else {
+                        throw switchError;
+                    }
+                }
+
+                // Process payment
+                await registerForEvent(event.id, event.price, signer);
+
+                // If payment successful, register for the event
+                post(route('events.register', event.id));
+            } catch (error) {
+                console.error('Payment error:', error);
+                setPaymentError(error.message || 'Failed to process payment');
+            } finally {
+                setIsProcessingPayment(false);
+            }
+        } else {
+            // For free events, just register
+            if (confirm('Are you sure you want to register for this event?')) {
+                post(route('events.register', event.id));
+            }
         }
     };
 
@@ -93,10 +154,25 @@ export default function Show({ auth, event }) {
                                     {event.is_paid && (
                                         <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                                             <CurrencyDollarIcon className="mr-1 h-4 w-4" />
-                                            RM {parseFloat(event.price).toFixed(2)}
+                                            {parseFloat(event.price).toFixed(8)} ETH
                                         </span>
                                     )}
                                 </div>
+
+                                {paymentError && (
+                                    <div className="mb-4 rounded-md bg-red-50 p-4 dark:bg-red-900/20">
+                                        <div className="flex">
+                                            <div className="ml-3">
+                                                <h3 className="text-sm font-medium text-red-800 dark:text-red-200">
+                                                    Payment Error
+                                                </h3>
+                                                <div className="mt-2 text-sm text-red-700 dark:text-red-300">
+                                                    {paymentError}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
 
                                 {event.is_registered ? (
                                     <button
@@ -109,10 +185,11 @@ export default function Show({ auth, event }) {
                                 ) : event.available_spots > 0 ? (
                                     <button
                                         onClick={handleRegistration}
-                                        disabled={processing}
+                                        disabled={processing || isProcessingPayment}
                                         className="rounded-lg bg-purple-600 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-purple-700 disabled:opacity-50"
                                     >
-                                        {event.is_paid ? 'Pay & Register' : 'Register for Event'}
+                                        {isProcessingPayment ? 'Processing Payment...' : 
+                                         event.is_paid ? 'Pay & Register' : 'Register for Event'}
                                     </button>
                                 ) : (
                                     <span className="rounded-lg bg-gray-100 px-6 py-2 text-sm font-semibold text-gray-800 dark:bg-gray-700 dark:text-gray-300">

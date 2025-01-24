@@ -5,6 +5,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import NavLink from '@/Components/NavLink';
 import { MoonIcon, SunIcon } from '@heroicons/react/24/outline';
+import WalletConnect from '@/Components/WalletConnect';
 
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -65,6 +66,12 @@ export default function Authenticated({ user, header, children }) {
                         </div>
 
                         <div className="flex items-center space-x-4">
+                            {/* Only show wallet connect for regular users */}
+                            {!window.location.pathname.startsWith('/event-organizer') && 
+                             !window.location.pathname.startsWith('/admin') && (
+                                <WalletConnect />
+                            )}
+
                             {/* Dark Mode Toggle */}
                             <button
                                 onClick={toggleDarkMode}

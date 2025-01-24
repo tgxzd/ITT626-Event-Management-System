@@ -1,8 +1,26 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { CalendarDaysIcon, MapPinIcon, UserGroupIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
 
 export default function Dashboard({ auth, eventStats }) {
+    const [processing, setProcessing] = useState(false);
+
+    const handleDelete = (eventId) => {
+        if (confirm('Are you sure you want to delete this event?')) {
+            setProcessing(true);
+            router.delete(route('event-organizer.events.destroy', eventId), {
+                onSuccess: () => {
+                    setProcessing(false);
+                    router.visit(route('event-organizer.dashboard'));
+                },
+                onError: () => {
+                    setProcessing(false);
+                },
+            });
+        }
+    };
+
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         return date.toLocaleString('en-US', {
@@ -135,7 +153,7 @@ export default function Dashboard({ auth, eventStats }) {
                                                         {event.is_paid ? (
                                                             <span className="inline-flex items-center text-sm font-medium text-gray-900 dark:text-white">
                                                                 <CurrencyDollarIcon className="mr-1 h-4 w-4 text-gray-500" />
-                                                                RM {parseFloat(event.price).toFixed(2)}
+                                                                {parseFloat(event.price).toFixed(8)} ETH
                                                             </span>
                                                         ) : (
                                                             <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -168,6 +186,13 @@ export default function Dashboard({ auth, eventStats }) {
                                                             >
                                                                 Registrations
                                                             </Link>
+                                                            <button
+                                                                onClick={() => handleDelete(event.id)}
+                                                                disabled={processing}
+                                                                className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                                                            >
+                                                                Delete
+                                                            </button>
                                                         </div>
                                                     </td>
                                                 </tr>
