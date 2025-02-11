@@ -35,6 +35,10 @@ class Event extends Model
 
     protected $appends = ['image_url'];
 
+    protected $attributes = [
+        'status' => 'Active'  // Set default status to Active
+    ];
+
     /**
      * Get the organizer that owns the event.
      */

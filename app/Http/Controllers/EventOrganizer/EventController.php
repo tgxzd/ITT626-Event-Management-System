@@ -163,7 +163,7 @@ class EventController extends Controller
                 'capacity' => $validated['capacity'],
                 'is_paid' => $validated['is_paid'],
                 'price' => $validated['is_paid'] ? $validated['price'] : null,
-                'status' => 'draft'
+                'status' => 'active'
             ];
 
             if ($request->hasFile('image')) {
