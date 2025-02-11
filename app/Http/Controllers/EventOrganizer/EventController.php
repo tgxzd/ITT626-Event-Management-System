@@ -173,7 +173,8 @@ class EventController extends Controller
 
             $event = Event::create($eventData);
 
-            return to_route('event-organizer.dashboard');
+            return redirect()->route('event-organizer.dashboard')
+                ->with('success', 'Event created successfully.');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()

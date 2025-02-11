@@ -19,3 +19,10 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# Disable directory browsing
+Options -Indexes
+
+# Handle PHP errors
+php_flag display_errors on
+php_value error_reporting E_ALL
